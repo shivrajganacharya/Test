@@ -1,18 +1,24 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mr. Locum</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --blue:#1A56A0;--blue-light:#E8F1FB;--blue-mid:#3B82C4;--blue-dark:#0C3566;
   --teal:#0B7B6B;--teal-light:#E3F5F2;
-  --amber:#854F0B;--amber-light:#FEF3E2;
   --white:#FFFFFF;--off:#F7F9FC;--border:#DDE4EE;
   --ink:#0F1C2E;--soft:#4A5568;--muted:#8A96A8;
+  --pad:3.5rem;
 }
+html{scroll-behavior:smooth}
 body{font-family:'Helvetica Neue',Arial,sans-serif;background:var(--white);color:var(--ink)}
 
-.nav{background:var(--white);border-bottom:1px solid var(--border);padding:0 3.5rem;display:flex;align-items:center;justify-content:space-between;height:64px}
-.logo{display:flex;align-items:center;gap:10px}
-.logo-mark{width:34px;height:34px;background:var(--blue);border-radius:6px;display:flex;align-items:center;justify-content:center;transition:background 0.3s}
+.nav{background:var(--white);border-bottom:1px solid var(--border);padding:0 var(--pad);display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:200}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{width:34px;height:34px;background:var(--blue);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.3s}
 .logo-cross{position:relative;width:16px;height:16px}
 .logo-cross::before,.logo-cross::after{content:'';position:absolute;background:white;border-radius:2px}
 .logo-cross::before{width:4px;height:16px;left:6px;top:0}
@@ -23,39 +29,47 @@ body{font-family:'Helvetica Neue',Arial,sans-serif;background:var(--white);color
 .nav-links a{font-size:0.83rem;color:var(--soft);text-decoration:none;transition:color 0.15s}
 .nav-links a:hover{color:var(--blue)}
 .nav-btn{background:var(--blue);color:white !important;padding:0.5rem 1.25rem;border-radius:6px;font-size:0.83rem;font-weight:500;transition:background 0.3s}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
+.hamburger span{display:block;width:22px;height:2px;background:var(--ink);border-radius:2px}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:var(--white);border-bottom:1px solid var(--border);padding:0 var(--pad) 1rem;z-index:199;flex-direction:column;gap:0}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:0.95rem;color:var(--soft);text-decoration:none;padding:0.85rem 0;border-bottom:1px solid var(--border)}
+.mobile-menu a:last-child{border-bottom:none}
+.mob-cta{background:var(--blue);color:white !important;padding:0.75rem 1.25rem !important;border-radius:6px;font-weight:600;text-align:center;margin-top:0.75rem;border-bottom:none !important}
 
-.prof-switcher-bar{background:var(--off);border-bottom:1px solid var(--border);padding:0 3.5rem;display:flex;align-items:center;gap:0}
-.prof-tab{display:flex;align-items:center;gap:8px;padding:0.85rem 1.5rem;font-size:0.83rem;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:all 0.2s;user-select:none}
+.prof-switcher-bar{background:var(--off);border-bottom:1px solid var(--border);padding:0 var(--pad);display:flex;align-items:center;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;position:sticky;top:64px;z-index:199}
+.prof-switcher-bar::-webkit-scrollbar{display:none}
+.prof-tab{display:flex;align-items:center;gap:8px;padding:0.85rem 1.25rem;font-size:0.83rem;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:all 0.2s;user-select:none;flex-shrink:0}
 .prof-tab:hover{color:var(--ink)}
 .prof-tab.active{border-bottom-color:var(--blue)}
-.prof-tab .tab-icon{width:20px;height:20px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;transition:background 0.2s}
+.prof-tab .tab-icon{width:20px;height:20px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.2s}
 .prof-tab .tab-icon svg{width:11px;height:11px;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:stroke 0.2s}
-.prof-tab .coming-pill{font-size:0.62rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;background:var(--border);color:var(--muted);padding:2px 6px;border-radius:4px;margin-left:2px}
+.coming-pill{font-size:0.6rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;background:var(--border);color:var(--muted);padding:2px 6px;border-radius:4px;margin-left:2px}
 
-.hero{padding:5rem 3.5rem 4.5rem;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;border-bottom:1px solid var(--border)}
+.hero{padding:5rem var(--pad) 4.5rem;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;border-bottom:1px solid var(--border)}
 .hero-badge{display:inline-flex;align-items:center;gap:6px;font-size:0.72rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;padding:5px 12px;border-radius:20px;margin-bottom:1.25rem;transition:background 0.3s,color 0.3s}
 .hero-badge-dot{width:6px;height:6px;border-radius:50%;transition:background 0.3s}
-.hero h1{font-size:clamp(2rem,3.2vw,2.7rem);font-weight:700;line-height:1.15;letter-spacing:-0.02em;color:var(--ink);margin-bottom:1rem}
+.hero h1{font-size:clamp(1.8rem,3.5vw,2.7rem);font-weight:700;line-height:1.15;letter-spacing:-0.02em;color:var(--ink);margin-bottom:1rem}
 .hero-sub{font-size:0.95rem;color:var(--soft);line-height:1.7;margin-bottom:2rem;max-width:44ch}
 .hero-actions{display:flex;gap:0.75rem;flex-wrap:wrap}
 .btn-primary{color:white;padding:0.75rem 1.75rem;border-radius:7px;font-size:0.88rem;font-weight:600;border:none;cursor:pointer;font-family:inherit;transition:background 0.3s}
 .btn-outline{background:white;padding:0.75rem 1.75rem;border-radius:7px;font-size:0.88rem;font-weight:600;border:1.5px solid;cursor:pointer;font-family:inherit;transition:all 0.3s}
-.hero-stats{display:flex;gap:2rem;margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--border)}
+.hero-stats{display:flex;gap:2rem;margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--border);flex-wrap:wrap}
 .stat strong{display:block;font-size:1.5rem;font-weight:700;letter-spacing:-0.02em;transition:color 0.3s}
 .stat span{font-size:0.75rem;color:var(--muted);margin-top:2px;display:block}
 
 .aud-cards{display:grid;grid-template-rows:1fr 1fr;gap:1rem}
 .aud-card{background:var(--off);border:1px solid var(--border);border-radius:12px;padding:1.5rem;display:flex;align-items:flex-start;gap:1rem;cursor:pointer;transition:border-color 0.2s,background 0.2s}
-.aud-card:hover{border-color:var(--blue-mid)}
+.aud-card:hover{border-color:var(--blue-mid);background:var(--blue-light)}
 .aud-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.3s}
 .aud-icon svg{width:22px;height:22px;stroke:white;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.aud-card h3{font-size:0.95rem;font-weight:600;margin-bottom:0.3rem}
+.aud-card h3{font-size:0.95rem;font-weight:600;margin-bottom:0.3rem;color:var(--ink)}
 .aud-card p{font-size:0.82rem;color:var(--soft);line-height:1.55}
 .aud-link{font-size:0.78rem;font-weight:600;margin-top:0.6rem;display:block;transition:color 0.3s}
 
-.section{padding:4.5rem 3.5rem;border-bottom:1px solid var(--border)}
+.section{padding:4.5rem var(--pad);border-bottom:1px solid var(--border)}
 .sec-label{font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.4rem;transition:color 0.3s}
-.sec-title{font-size:clamp(1.5rem,2.2vw,1.9rem);font-weight:700;letter-spacing:-0.02em;margin-bottom:0.4rem}
+.sec-title{font-size:clamp(1.4rem,2.5vw,1.9rem);font-weight:700;letter-spacing:-0.02em;margin-bottom:0.4rem}
 .sec-sub{font-size:0.9rem;color:var(--soft);line-height:1.65;max-width:52ch;margin-bottom:2.5rem}
 
 .how-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
@@ -75,14 +89,13 @@ body{font-family:'Helvetica Neue',Arial,sans-serif;background:var(--white);color
 .spec-dot{width:7px;height:7px;border-radius:50%;margin-bottom:0.75rem;transition:background 0.3s}
 .spec-name{font-size:0.85rem;font-weight:600;margin-bottom:0.2rem}
 .spec-count{font-size:0.73rem;color:var(--muted)}
-.spec-tag{display:inline-block;font-size:0.63rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;padding:2px 7px;border-radius:4px;margin-top:0.5rem;transition:background 0.3s,color 0.3s}
+.spec-tag{display:inline-block;font-size:0.63rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;padding:2px 7px;border-radius:4px;margin-top:0.5rem}
 
 .signup-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
 .signup-card{border:1px solid var(--border);border-radius:14px;padding:2rem}
 .signup-card.light{background:var(--white)}
 .signup-card.dark{border-color:transparent;transition:background 0.3s}
-.card-type{font-size:0.68rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.6rem;transition:color 0.3s}
-.signup-card.light .card-type{color:var(--blue)}
+.card-type{font-size:0.68rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.6rem}
 .signup-card.dark .card-type{color:rgba(255,255,255,0.55)}
 .signup-card h3{font-size:1.15rem;font-weight:700;margin-bottom:0.4rem;letter-spacing:-0.01em}
 .signup-card.dark h3{color:white}
@@ -91,23 +104,23 @@ body{font-family:'Helvetica Neue',Arial,sans-serif;background:var(--white);color
 .field{margin-bottom:0.8rem}
 .field label{display:block;font-size:0.68rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:0.3rem}
 .signup-card.dark .field label{color:rgba(255,255,255,0.45)}
-.field input,.field select{width:100%;padding:0.6rem 0.8rem;border:1px solid var(--border);border-radius:7px;background:var(--off);font-family:inherit;font-size:0.85rem;color:var(--ink);outline:none;transition:border-color 0.2s}
+.field input,.field select{width:100%;padding:0.65rem 0.8rem;border:1px solid var(--border);border-radius:7px;background:var(--off);font-family:inherit;font-size:0.85rem;color:var(--ink);outline:none;transition:border-color 0.2s;-webkit-appearance:none;appearance:none}
 .field input:focus,.field select:focus{border-color:var(--blue)}
 .signup-card.dark .field input,.signup-card.dark .field select{background:rgba(255,255,255,0.09);border-color:rgba(255,255,255,0.18);color:white}
 .field input::placeholder{color:var(--muted)}
 .signup-card.dark .field input::placeholder{color:rgba(255,255,255,0.3)}
-.submit-btn{width:100%;padding:0.72rem;border:none;border-radius:7px;font-family:inherit;font-size:0.85rem;font-weight:600;cursor:pointer;margin-top:0.5rem;transition:background 0.3s}
+.submit-btn{width:100%;padding:0.75rem;border:none;border-radius:7px;font-family:inherit;font-size:0.85rem;font-weight:600;cursor:pointer;margin-top:0.5rem;transition:background 0.3s}
 
-.trust-bar{background:var(--blue-dark);padding:3.5rem;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.trust-bar{background:var(--blue-dark);padding:3.5rem var(--pad);display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
 .trust-label{font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#7AAEE0;margin-bottom:0.5rem}
-.trust-bar h2{font-size:1.7rem;font-weight:700;color:white;letter-spacing:-0.02em;margin-bottom:0.5rem;line-height:1.2}
+.trust-bar h2{font-size:clamp(1.3rem,2.5vw,1.7rem);font-weight:700;color:white;letter-spacing:-0.02em;margin-bottom:0.5rem;line-height:1.2}
 .trust-bar p{font-size:0.86rem;color:rgba(255,255,255,0.55);line-height:1.7}
 .trust-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 .trust-item{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:1.2rem}
 .trust-item strong{display:block;font-size:1.4rem;font-weight:700;color:white;letter-spacing:-0.02em}
 .trust-item span{font-size:0.73rem;color:rgba(255,255,255,0.45);margin-top:3px;display:block}
 
-.footer{background:var(--ink);padding:3rem 3.5rem 2rem;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:3rem}
+.footer{background:var(--ink);padding:3rem var(--pad) 2rem;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:3rem}
 .flogo{display:flex;align-items:center;gap:8px;margin-bottom:0.6rem}
 .fmark{width:28px;height:28px;background:var(--blue);border-radius:5px;display:flex;align-items:center;justify-content:center}
 .fcross{position:relative;width:13px;height:13px}
@@ -120,54 +133,116 @@ body{font-family:'Helvetica Neue',Arial,sans-serif;background:var(--white);color
 .footer-col h4{font-size:0.63rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.28);margin-bottom:0.85rem}
 .footer-col a{display:block;font-size:0.8rem;color:rgba(255,255,255,0.5);margin-bottom:0.45rem;text-decoration:none;transition:color 0.15s}
 .footer-col a:hover{color:white}
-.footer-bottom{grid-column:1/-1;border-top:1px solid rgba(255,255,255,0.06);padding-top:1.5rem;font-size:0.73rem;color:rgba(255,255,255,0.2);display:flex;justify-content:space-between}
+.footer-bottom{grid-column:1/-1;border-top:1px solid rgba(255,255,255,0.06);padding-top:1.5rem;font-size:0.73rem;color:rgba(255,255,255,0.2);display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.75rem}
 .footer-bottom a{color:rgba(255,255,255,0.2);text-decoration:none;margin-left:1.5rem}
+
+/* TABLET ≤ 1024px */
+@media(max-width:1024px){
+  :root{--pad:2rem}
+  .hero{grid-template-columns:1fr;gap:2.5rem;padding:3.5rem var(--pad)}
+  .aud-cards{grid-template-rows:auto;grid-template-columns:1fr 1fr}
+  .how-grid{grid-template-columns:1fr}
+  .spec-grid{grid-template-columns:repeat(2,1fr)}
+  .signup-grid{grid-template-columns:1fr}
+  .trust-bar{grid-template-columns:1fr;gap:2rem;padding:3rem var(--pad)}
+  .footer{grid-template-columns:1fr 1fr;gap:2rem}
+  .nav-text-link{display:none}
+}
+
+/* MOBILE ≤ 640px */
+@media(max-width:640px){
+  :root{--pad:1.25rem}
+  .nav{height:56px}
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .mobile-menu{top:56px}
+  .prof-switcher-bar{top:56px;padding:0 0.25rem}
+  .prof-tab{padding:0.75rem 0.9rem;font-size:0.78rem;gap:5px}
+  .prof-tab .tab-icon{width:18px;height:18px}
+  .hero{grid-template-columns:1fr;padding:2.5rem var(--pad) 2rem;gap:2rem}
+  .hero h1{font-size:1.75rem}
+  .hero-sub{font-size:0.9rem;max-width:100%}
+  .btn-primary,.btn-outline{width:100%;text-align:center;padding:0.85rem 1rem}
+  .hero-stats{gap:1.25rem}
+  .stat strong{font-size:1.25rem}
+  .aud-cards{grid-template-columns:1fr;grid-template-rows:auto auto}
+  .aud-card{padding:1.1rem}
+  .section{padding:2.5rem var(--pad)}
+  .sec-sub{margin-bottom:1.5rem;max-width:100%}
+  .how-grid{gap:1rem}
+  .spec-grid{grid-template-columns:repeat(2,1fr)}
+  .spec-item{padding:1rem}
+  .signup-grid{gap:1.25rem}
+  .signup-card{padding:1.5rem}
+  .trust-bar{padding:2.5rem var(--pad);gap:1.75rem}
+  .trust-grid{grid-template-columns:1fr 1fr}
+  .footer{grid-template-columns:1fr;gap:2rem;padding:2.5rem var(--pad) 1.5rem}
+  .footer-bottom{flex-direction:column;align-items:flex-start;gap:0.5rem}
+  .footer-bottom a{margin-left:0;margin-right:1rem}
+}
+
+/* VERY SMALL ≤ 400px */
+@media(max-width:400px){
+  .prof-tab .tab-label{display:none}
+  .prof-tab{padding:0.75rem 0.6rem}
+  .spec-grid{grid-template-columns:1fr}
+  .hero-stats{flex-wrap:wrap;gap:1rem}
+}
 </style>
+</head>
+<body>
 
 <nav class="nav">
-  <div class="logo">
+  <a class="logo" href="#">
     <div class="logo-mark" id="nav-mark"><div class="logo-cross"></div></div>
-    <span class="logo-text">Mr.<span id="nav-accent">Locum</span></span>
-  </div>
+    <span class="logo-text">Mr.<span>Locum</span></span>
+  </a>
   <ul class="nav-links">
-    <li><a href="#how">How it works</a></li>
-    <li><a href="#specialties">Specialties</a></li>
-    <li><a href="#signup">Sign up</a></li>
+    <li class="nav-text-link"><a href="#how">How it works</a></li>
+    <li class="nav-text-link"><a href="#specialties">Specialties</a></li>
+    <li class="nav-text-link"><a href="#signup">Sign up</a></li>
     <li><a href="#signup" class="nav-btn" id="nav-btn">Get started</a></li>
   </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#how" onclick="closeMenu()">How it works</a>
+  <a href="#specialties" onclick="closeMenu()">Specialties</a>
+  <a href="#signup" onclick="closeMenu()">Sign up</a>
+  <a href="#signup" class="mob-cta" onclick="closeMenu()">Get started</a>
+</div>
 
 <div class="prof-switcher-bar">
   <div class="prof-tab active" data-prof="doctor" onclick="switchProf('doctor',this)">
     <div class="tab-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-    Doctors
+    <span class="tab-label">Doctors</span>
   </div>
   <div class="prof-tab" data-prof="nurse" onclick="switchProf('nurse',this)">
     <div class="tab-icon"><svg viewBox="0 0 24 24"><path d="M12 2a5 5 0 0 1 5 5v2H7V7a5 5 0 0 1 5-5z"/><rect x="5" y="9" width="14" height="13" rx="2"/><path d="M12 13v4M10 15h4"/></svg></div>
-    Nurses
+    <span class="tab-label">Nurses</span>
   </div>
   <div class="prof-tab" data-prof="paramedic" onclick="switchProf('paramedic',this)">
     <div class="tab-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8M8 12h8"/></svg></div>
-    Paramedics
+    <span class="tab-label">Paramedics</span>
   </div>
   <div class="prof-tab" style="opacity:0.45;cursor:default;pointer-events:none">
     <div class="tab-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg></div>
-    Pharmacists
-    <span class="coming-pill">Coming soon</span>
+    <span class="tab-label">Pharmacists</span>
+    <span class="coming-pill">Soon</span>
   </div>
   <div class="prof-tab" style="opacity:0.45;cursor:default;pointer-events:none">
     <div class="tab-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-    Dentists
-    <span class="coming-pill">Coming soon</span>
+    <span class="tab-label">Dentists</span>
+    <span class="coming-pill">Soon</span>
   </div>
 </div>
 
 <section class="hero" id="hero-section">
   <div>
-    <div class="hero-badge" id="hero-badge">
-      <span class="hero-badge-dot" id="badge-dot"></span>
-      <span id="badge-text"></span>
-    </div>
+    <div class="hero-badge" id="hero-badge"><span class="hero-badge-dot" id="badge-dot"></span><span id="badge-text"></span></div>
     <h1 id="hero-h1"></h1>
     <p class="hero-sub" id="hero-sub"></p>
     <div class="hero-actions">
@@ -182,24 +257,12 @@ body{font-family:'Helvetica Neue',Arial,sans-serif;background:var(--white);color
   </div>
   <div class="aud-cards">
     <div class="aud-card" onclick="document.getElementById('signup').scrollIntoView({behavior:'smooth'})">
-      <div class="aud-icon" id="aud-icon-1">
-        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      </div>
-      <div>
-        <h3 id="aud1-title"></h3>
-        <p id="aud1-desc"></p>
-        <span class="aud-link" id="aud1-link">Create your profile →</span>
-      </div>
+      <div class="aud-icon" id="aud-icon-1"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <div><h3 id="aud1-title"></h3><p id="aud1-desc"></p><span class="aud-link" id="aud1-link">Create your profile →</span></div>
     </div>
     <div class="aud-card" onclick="document.getElementById('signup').scrollIntoView({behavior:'smooth'})">
-      <div class="aud-icon" style="background:var(--teal)">
-        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M12 8v8M8 12h8"/></svg>
-      </div>
-      <div>
-        <h3>I'm a hospital or clinic</h3>
-        <p id="aud2-desc"></p>
-        <span class="aud-link" style="color:var(--teal)">Post a vacancy →</span>
-      </div>
+      <div class="aud-icon" style="background:var(--teal)"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M12 8v8M8 12h8"/></svg></div>
+      <div><h3>I'm a hospital or clinic</h3><p id="aud2-desc"></p><span class="aud-link" style="color:var(--teal)">Post a vacancy →</span></div>
     </div>
   </div>
 </section>
@@ -298,175 +361,53 @@ body{font-family:'Helvetica Neue',Arial,sans-serif;background:var(--white);color
 
 <script>
 const P={
-  doctor:{
-    color:'#1A56A0',light:'#E8F1FB',
-    badge:'GMC-verified locum doctors',
-    h1:'Locum <span style="color:#1A56A0">doctors</span> placed in 24 hours',
-    sub:'Mr. Locum connects verified NHS and private doctors with hospitals and clinics across the UK. Flexible, fully compliant, and fast.',
-    s1:'1,200+',s1l:'Verified doctors',s2:'24 hrs',s2l:'Avg fill time',s3:'99%',s3l:'GMC compliant',
-    a1:'I\'m a doctor',a1d:'Access flexible locum placements matched to your specialty, grade, and availability. Full compliance support included.',
-    a2d:'Post a doctor vacancy and receive pre-vetted, GMC-verified candidates within hours.',
-    howSub:'Whether you\'re a doctor seeking flexible work or a trust filling a rota gap, we make it straightforward.',
-    pill1:'For doctors',ep1:'Describe the shift, specialty, and grade required. Takes under three minutes.',
-    sh1:'Build your profile',sp1:'Upload GMC registration, indemnity, and DBS. Our compliance team verifies within 2 hours.',
-    sh2:'Browse matched shifts',sp2:'See roles filtered to your specialty, grade, and preferred locations.',
-    sh3:'Accept and get paid',sp3:'e-Sign your contract, complete the shift, and receive payment within 48 hours.',
-    specTitle:'Across every clinical discipline',specSub:'Our doctor network spans the full breadth of NHS and private healthcare needs.',
-    specs:[
-      {n:'Emergency Medicine',c:'410 doctors',t:'High demand'},
-      {n:'General Surgery',c:'285 doctors',t:'Available now'},
-      {n:'Anaesthetics',c:'178 doctors',t:'Available now'},
-      {n:'Radiology',c:'142 doctors',t:'Available now'},
-      {n:'Psychiatry',c:'156 doctors',t:'High demand'},
-      {n:'General Medicine',c:'320 doctors',t:'Available now'},
-      {n:'Paediatrics',c:'198 doctors',t:'Specialist'},
-      {n:'Obstetrics & Gynae',c:'112 doctors',t:'Specialist'},
-    ],
-    sc1type:'For doctors',sc1title:'Find locum placements',sc1desc:'Access shifts matched to your specialty. GMC compliance managed in-house.',
-    roleL:'Grade',roleO:['Consultant','Registrar','SHO','FY1 / FY2'],
-    specL:'Specialty',specO:['Emergency Medicine','General Surgery','Anaesthetics','Radiology','Psychiatry','General Medicine'],
-    sub2:'Sign up in minutes. Verified and placed within 24 hours.',ph:'Dr. Amara Osei',
-  },
-  nurse:{
-    color:'#0B7B6B',light:'#E3F5F2',
-    badge:'NMC-verified locum nurses',
-    h1:'Locum <span style="color:#0B7B6B">nurses</span> placed in 24 hours',
-    sub:'Mr. Locum connects NMC-registered nurses with NHS trusts, private hospitals, and care settings across the UK. Fast, compliant, flexible.',
-    s1:'1,800+',s1l:'Verified nurses',s2:'24 hrs',s2l:'Avg fill time',s3:'99%',s3l:'NMC compliant',
-    a1:'I\'m a nurse',a1d:'Browse shifts matched to your ward specialty and band. Fully managed NMC compliance and DBS checks.',
-    a2d:'Post a nursing vacancy and receive pre-vetted, NMC-registered candidates within hours.',
-    howSub:'Whether you\'re a nurse seeking flexible shifts or a ward manager filling a gap, we make it straightforward.',
-    pill1:'For nurses',ep1:'Describe the shift, ward type, and band required. Takes under three minutes.',
-    sh1:'Build your profile',sp1:'Upload NMC registration, indemnity, and DBS. Verified within 2 hours.',
-    sh2:'Browse matched shifts',sp2:'See ward shifts matched to your band and specialty. Filter by location and rate.',
-    sh3:'Accept and get paid',sp3:'e-Sign your contract, complete your shift, and get paid within 48 hours.',
-    specTitle:'Across every ward and care setting',specSub:'Our nursing network covers all NHS and private ward specialties.',
-    specs:[
-      {n:'General Nursing',c:'820 nurses',t:'Largest pool'},
-      {n:'ITU / ICU',c:'193 nurses',t:'Specialist'},
-      {n:'Paediatric Nursing',c:'230 nurses',t:'Specialist'},
-      {n:'Theatre Nursing',c:'178 nurses',t:'Available now'},
-      {n:'Mental Health',c:'210 nurses',t:'High demand'},
-      {n:'A&E Nursing',c:'310 nurses',t:'High demand'},
-      {n:'Community Nursing',c:'145 nurses',t:'Available now'},
-      {n:'District Nursing',c:'98 nurses',t:'Available now'},
-    ],
-    sc1type:'For nurses',sc1title:'Find nursing shifts',sc1desc:'Access ward shifts matched to your band and specialty. NMC compliance handled for you.',
-    roleL:'Band',roleO:['Band 5','Band 6','Band 7','Band 8'],
-    specL:'Ward specialty',specO:['General Nursing','ITU / ICU','A&E Nursing','Theatre Nursing','Mental Health','Paediatrics'],
-    sub2:'Sign up in minutes. NMC-verified and placed within 24 hours.',ph:'Nurse Priya Patel',
-  },
-  paramedic:{
-    color:'#854F0B',light:'#FEF3E2',
-    badge:'HCPC-verified locum paramedics',
-    h1:'Locum <span style="color:#854F0B">paramedics</span> placed fast',
-    sub:'Mr. Locum connects HCPC-registered paramedics with ambulance services, event companies, and urgent care providers across the UK.',
-    s1:'380+',s1l:'Verified paramedics',s2:'48 hrs',s2l:'Avg fill time',s3:'100%',s3l:'HCPC compliant',
-    a1:'I\'m a paramedic',a1d:'Find flexible locum shifts with ambulance trusts, event medical cover, and urgent care providers.',
-    a2d:'Post a paramedic vacancy and receive HCPC-verified, deployment-ready candidates.',
-    howSub:'Whether you\'re a paramedic seeking flexible shifts or a service filling a gap, we make it straightforward.',
-    pill1:'For paramedics',ep1:'Describe the role type, response level, and shift pattern. Under three minutes.',
-    sh1:'Build your profile',sp1:'Upload HCPC registration, DBS, and operational certificates. Verified within 4 hours.',
-    sh2:'Browse matched shifts',sp2:'See roles matched to your skill level — emergency, urgent care, or event cover.',
-    sh3:'Accept and get paid',sp3:'Confirm your shift, attend, and receive payment within 48 hours.',
-    specTitle:'Across all emergency and urgent care settings',specSub:'Our paramedic network covers NHS ambulance trusts, events, and private urgent care.',
-    specs:[
-      {n:'Emergency (999)',c:'180 paramedics',t:'High demand'},
-      {n:'Urgent Care',c:'95 paramedics',t:'Available now'},
-      {n:'Event Medical Cover',c:'140 paramedics',t:'Available now'},
-      {n:'Critical Care',c:'42 paramedics',t:'Specialist'},
-      {n:'Community Paramedic',c:'58 paramedics',t:'Available now'},
-      {n:'Air Ambulance',c:'22 paramedics',t:'Specialist'},
-      {n:'Industrial Paramedic',c:'35 paramedics',t:'Available now'},
-      {n:'Offshore / Remote',c:'18 paramedics',t:'Specialist'},
-    ],
-    sc1type:'For paramedics',sc1title:'Find locum shifts',sc1desc:'Access paramedic shifts matched to your level and certification. HCPC compliance managed.',
-    roleL:'Role level',roleO:['EMT','Paramedic','Advanced Paramedic','Critical Care Paramedic'],
-    specL:'Setting',specO:['Emergency (999)','Urgent Care','Event Cover','Critical Care','Community','Industrial'],
-    sub2:'Sign up in minutes. HCPC-verified and deployed within 48 hours.',ph:'Paramedic James Okonkwo',
-  }
+  doctor:{color:'#1A56A0',light:'#E8F1FB',badge:'GMC-verified locum doctors',h1:'Locum <span style="color:#1A56A0">doctors</span> placed in 24 hours',sub:'Mr. Locum connects verified NHS and private doctors with hospitals and clinics across the UK. Flexible, fully compliant, and fast.',s1:'1,200+',s1l:'Verified doctors',s2:'24 hrs',s2l:'Avg fill time',s3:'99%',s3l:'GMC compliant',a1:"I'm a doctor",a1d:'Access flexible locum placements matched to your specialty, grade, and availability. Full compliance support included.',a2d:'Post a doctor vacancy and receive pre-vetted, GMC-verified candidates within hours.',howSub:"Whether you're a doctor seeking flexible work or a trust filling a rota gap, we make it straightforward.",pill1:'For doctors',ep1:'Describe the shift, specialty, and grade required. Takes under three minutes.',sh1:'Build your profile',sp1:'Upload GMC registration, indemnity, and DBS. Our compliance team verifies within 2 hours.',sh2:'Browse matched shifts',sp2:'See roles filtered to your specialty, grade, and preferred locations.',sh3:'Accept and get paid',sp3:'e-Sign your contract, complete the shift, and receive payment within 48 hours.',specTitle:'Across every clinical discipline',specSub:'Our doctor network spans the full breadth of NHS and private healthcare needs.',specs:[{n:'Emergency Medicine',c:'410 doctors',t:'High demand'},{n:'General Surgery',c:'285 doctors',t:'Available now'},{n:'Anaesthetics',c:'178 doctors',t:'Available now'},{n:'Radiology',c:'142 doctors',t:'Available now'},{n:'Psychiatry',c:'156 doctors',t:'High demand'},{n:'General Medicine',c:'320 doctors',t:'Available now'},{n:'Paediatrics',c:'198 doctors',t:'Specialist'},{n:'Obstetrics & Gynae',c:'112 doctors',t:'Specialist'}],sc1type:'For doctors',sc1title:'Find locum placements',sc1desc:'Access shifts matched to your specialty. GMC compliance managed in-house.',roleL:'Grade',roleO:['Consultant','Registrar','SHO','FY1 / FY2'],specL:'Specialty',specO:['Emergency Medicine','General Surgery','Anaesthetics','Radiology','Psychiatry','General Medicine'],sub2:'Sign up in minutes. Verified and placed within 24 hours.',ph:'Dr. Amara Osei'},
+  nurse:{color:'#0B7B6B',light:'#E3F5F2',badge:'NMC-verified locum nurses',h1:'Locum <span style="color:#0B7B6B">nurses</span> placed in 24 hours',sub:'Mr. Locum connects NMC-registered nurses with NHS trusts, private hospitals, and care settings across the UK. Fast, compliant, flexible.',s1:'1,800+',s1l:'Verified nurses',s2:'24 hrs',s2l:'Avg fill time',s3:'99%',s3l:'NMC compliant',a1:"I'm a nurse",a1d:'Browse shifts matched to your ward specialty and band. Fully managed NMC compliance and DBS checks.',a2d:'Post a nursing vacancy and receive pre-vetted, NMC-registered candidates within hours.',howSub:"Whether you're a nurse seeking flexible shifts or a ward manager filling a gap, we make it straightforward.",pill1:'For nurses',ep1:'Describe the shift, ward type, and band required. Takes under three minutes.',sh1:'Build your profile',sp1:'Upload NMC registration, indemnity, and DBS. Verified within 2 hours.',sh2:'Browse matched shifts',sp2:'See ward shifts matched to your band and specialty. Filter by location and rate.',sh3:'Accept and get paid',sp3:'e-Sign your contract, complete your shift, and get paid within 48 hours.',specTitle:'Across every ward and care setting',specSub:'Our nursing network covers all NHS and private ward specialties.',specs:[{n:'General Nursing',c:'820 nurses',t:'Largest pool'},{n:'ITU / ICU',c:'193 nurses',t:'Specialist'},{n:'Paediatric Nursing',c:'230 nurses',t:'Specialist'},{n:'Theatre Nursing',c:'178 nurses',t:'Available now'},{n:'Mental Health',c:'210 nurses',t:'High demand'},{n:'A&E Nursing',c:'310 nurses',t:'High demand'},{n:'Community Nursing',c:'145 nurses',t:'Available now'},{n:'District Nursing',c:'98 nurses',t:'Available now'}],sc1type:'For nurses',sc1title:'Find nursing shifts',sc1desc:'Access ward shifts matched to your band and specialty. NMC compliance handled for you.',roleL:'Band',roleO:['Band 5','Band 6','Band 7','Band 8'],specL:'Ward specialty',specO:['General Nursing','ITU / ICU','A&E Nursing','Theatre Nursing','Mental Health','Paediatrics'],sub2:'Sign up in minutes. NMC-verified and placed within 24 hours.',ph:'Nurse Priya Patel'},
+  paramedic:{color:'#854F0B',light:'#FEF3E2',badge:'HCPC-verified locum paramedics',h1:'Locum <span style="color:#854F0B">paramedics</span> placed fast',sub:'Mr. Locum connects HCPC-registered paramedics with ambulance services, event companies, and urgent care providers across the UK.',s1:'380+',s1l:'Verified paramedics',s2:'48 hrs',s2l:'Avg fill time',s3:'100%',s3l:'HCPC compliant',a1:"I'm a paramedic",a1d:'Find flexible locum shifts with ambulance trusts, event medical cover, and urgent care providers.',a2d:'Post a paramedic vacancy and receive HCPC-verified, deployment-ready candidates.',howSub:"Whether you're a paramedic seeking flexible shifts or a service filling a gap, we make it straightforward.",pill1:'For paramedics',ep1:'Describe the role type, response level, and shift pattern. Under three minutes.',sh1:'Build your profile',sp1:'Upload HCPC registration, DBS, and operational certificates. Verified within 4 hours.',sh2:'Browse matched shifts',sp2:'See roles matched to your skill level — emergency, urgent care, or event cover.',sh3:'Accept and get paid',sp3:'Confirm your shift, attend, and receive payment within 48 hours.',specTitle:'Across all emergency and urgent care settings',specSub:'Our paramedic network covers NHS ambulance trusts, events, and private urgent care.',specs:[{n:'Emergency (999)',c:'180 paramedics',t:'High demand'},{n:'Urgent Care',c:'95 paramedics',t:'Available now'},{n:'Event Medical Cover',c:'140 paramedics',t:'Available now'},{n:'Critical Care',c:'42 paramedics',t:'Specialist'},{n:'Community Paramedic',c:'58 paramedics',t:'Available now'},{n:'Air Ambulance',c:'22 paramedics',t:'Specialist'},{n:'Industrial Paramedic',c:'35 paramedics',t:'Available now'},{n:'Offshore / Remote',c:'18 paramedics',t:'Specialist'}],sc1type:'For paramedics',sc1title:'Find locum shifts',sc1desc:'Access paramedic shifts matched to your level and certification. HCPC compliance managed.',roleL:'Role level',roleO:['EMT','Paramedic','Advanced Paramedic','Critical Care Paramedic'],specL:'Setting',specO:['Emergency (999)','Urgent Care','Event Cover','Critical Care','Community','Industrial'],sub2:'Sign up in minutes. HCPC-verified and deployed within 48 hours.',ph:'Paramedic James Okonkwo'}
 };
 
-function switchProf(key, el) {
-  const d = P[key];
-  document.querySelectorAll('.prof-tab[data-prof]').forEach(t => {
-    t.classList.remove('active');
-    t.style.color = '';
-    const ic = t.querySelector('.tab-icon');
-    if(ic){ ic.style.background=''; ic.querySelector('svg').style.stroke=''; }
-  });
-  el.classList.add('active');
-  el.style.color = d.color;
-  const tic = el.querySelector('.tab-icon');
-  if(tic){ tic.style.background=d.light; tic.querySelector('svg').style.stroke=d.color; }
-
-  document.getElementById('nav-mark').style.background = d.color;
-  document.getElementById('nav-btn').style.background = d.color;
-
-  const badge = document.getElementById('hero-badge');
-  badge.style.background = d.light; badge.style.color = d.color;
-  document.getElementById('badge-dot').style.background = d.color;
-  document.getElementById('badge-text').textContent = d.badge;
-  document.getElementById('hero-h1').innerHTML = d.h1;
-  document.getElementById('hero-sub').textContent = d.sub;
-
-  ['stat1','stat2','stat3'].forEach((id,i)=>{
-    const vals = [d.s1,d.s2,d.s3], lbls = [d.s1l,d.s2l,d.s3l];
-    document.getElementById(id).textContent = vals[i];
-    document.getElementById(id).style.color = d.color;
-    document.getElementById(id+'l').textContent = lbls[i];
-  });
-
-  document.getElementById('btn-find').style.background = d.color;
-  document.getElementById('btn-hire').style.color = d.color;
-  document.getElementById('btn-hire').style.borderColor = d.color;
-  document.getElementById('aud-icon-1').style.background = d.color;
-  document.getElementById('aud1-title').textContent = d.a1;
-  document.getElementById('aud1-desc').textContent = d.a1d;
-  document.getElementById('aud1-link').style.color = d.color;
-  document.getElementById('aud2-desc').textContent = d.a2d;
-
-  document.getElementById('how-label').style.color = d.color;
-  document.getElementById('how-sub').textContent = d.howSub;
-  document.getElementById('how-p1-icon').style.stroke = d.color;
-  document.getElementById('how-pill1').textContent = d.pill1;
-  document.getElementById('how-pill1').style.background = d.light;
-  document.getElementById('how-pill1').style.color = d.color;
-  ['sn1','sn2','sn3'].forEach(id => document.getElementById(id).style.background = d.color);
-  document.getElementById('ep1').textContent = d.ep1;
-  document.getElementById('sh1').textContent = d.sh1; document.getElementById('sp1').textContent = d.sp1;
-  document.getElementById('sh2').textContent = d.sh2; document.getElementById('sp2').textContent = d.sp2;
-  document.getElementById('sh3').textContent = d.sh3; document.getElementById('sp3').textContent = d.sp3;
-
-  document.getElementById('spec-label').style.color = d.color;
-  document.getElementById('spec-title').textContent = d.specTitle;
-  document.getElementById('spec-sub').textContent = d.specSub;
-  const sg = document.getElementById('spec-grid');
-  sg.innerHTML = '';
-  d.specs.forEach(s => {
-    const div = document.createElement('div');
-    div.className = 'spec-item';
-    div.innerHTML = `<div class="spec-dot" style="background:${d.color}"></div><div class="spec-name">${s.n}</div><div class="spec-count">${s.c}</div><span class="spec-tag" style="background:${d.light};color:${d.color}">${s.t}</span>`;
-    sg.appendChild(div);
-  });
-
-  document.getElementById('signup-label').style.color = d.color;
-  document.getElementById('signup-sub').textContent = d.sub2;
-  document.getElementById('sc1-type').textContent = d.sc1type;
-  document.getElementById('sc1-type').style.color = d.color;
-  document.getElementById('sc1-title').textContent = d.sc1title;
-  document.getElementById('sc1-desc').textContent = d.sc1desc;
-  document.getElementById('sc-name').placeholder = d.ph;
-  document.getElementById('sc-role-lbl').textContent = d.roleL;
-  const rs = document.getElementById('sc-role-sel');
-  rs.innerHTML = `<option>Select ${d.roleL.toLowerCase()}...</option>` + d.roleO.map(o=>`<option>${o}</option>`).join('');
-  document.getElementById('sc-spec-lbl').textContent = d.specL;
-  const ss = document.getElementById('sc-spec-sel');
-  ss.innerHTML = `<option>Select ${d.specL.toLowerCase()}...</option>` + d.specO.map(o=>`<option>${o}</option>`).join('');
-  document.getElementById('sc1-btn').style.background = d.color;
-  document.getElementById('sc-dark').style.background = d.color;
-  document.getElementById('sc2-btn').style.color = d.color;
+function switchProf(key,el){
+  const d=P[key];
+  document.querySelectorAll('.prof-tab[data-prof]').forEach(t=>{t.classList.remove('active');t.style.color='';const ic=t.querySelector('.tab-icon');if(ic){ic.style.background='';ic.querySelector('svg').style.stroke='';}});
+  el.classList.add('active');el.style.color=d.color;
+  const tic=el.querySelector('.tab-icon');if(tic){tic.style.background=d.light;tic.querySelector('svg').style.stroke=d.color;}
+  document.getElementById('nav-mark').style.background=d.color;
+  document.getElementById('nav-btn').style.background=d.color;
+  const badge=document.getElementById('hero-badge');badge.style.background=d.light;badge.style.color=d.color;
+  document.getElementById('badge-dot').style.background=d.color;
+  document.getElementById('badge-text').textContent=d.badge;
+  document.getElementById('hero-h1').innerHTML=d.h1;
+  document.getElementById('hero-sub').textContent=d.sub;
+  ['stat1','stat2','stat3'].forEach((id,i)=>{const v=[d.s1,d.s2,d.s3],l=[d.s1l,d.s2l,d.s3l];document.getElementById(id).textContent=v[i];document.getElementById(id).style.color=d.color;document.getElementById(id+'l').textContent=l[i];});
+  document.getElementById('btn-find').style.background=d.color;
+  document.getElementById('btn-hire').style.color=d.color;document.getElementById('btn-hire').style.borderColor=d.color;
+  document.getElementById('aud-icon-1').style.background=d.color;
+  document.getElementById('aud1-title').textContent=d.a1;document.getElementById('aud1-desc').textContent=d.a1d;document.getElementById('aud1-link').style.color=d.color;
+  document.getElementById('aud2-desc').textContent=d.a2d;
+  document.getElementById('how-label').style.color=d.color;document.getElementById('how-sub').textContent=d.howSub;
+  document.getElementById('how-p1-icon').style.stroke=d.color;document.getElementById('how-pill1').textContent=d.pill1;document.getElementById('how-pill1').style.background=d.light;document.getElementById('how-pill1').style.color=d.color;
+  ['sn1','sn2','sn3'].forEach(id=>document.getElementById(id).style.background=d.color);
+  document.getElementById('ep1').textContent=d.ep1;
+  document.getElementById('sh1').textContent=d.sh1;document.getElementById('sp1').textContent=d.sp1;
+  document.getElementById('sh2').textContent=d.sh2;document.getElementById('sp2').textContent=d.sp2;
+  document.getElementById('sh3').textContent=d.sh3;document.getElementById('sp3').textContent=d.sp3;
+  document.getElementById('spec-label').style.color=d.color;document.getElementById('spec-title').textContent=d.specTitle;document.getElementById('spec-sub').textContent=d.specSub;
+  const sg=document.getElementById('spec-grid');sg.innerHTML='';
+  d.specs.forEach(s=>{const div=document.createElement('div');div.className='spec-item';div.innerHTML=`<div class="spec-dot" style="background:${d.color}"></div><div class="spec-name">${s.n}</div><div class="spec-count">${s.c}</div><span class="spec-tag" style="background:${d.light};color:${d.color}">${s.t}</span>`;sg.appendChild(div);});
+  document.getElementById('signup-label').style.color=d.color;document.getElementById('signup-sub').textContent=d.sub2;
+  document.getElementById('sc1-type').textContent=d.sc1type;document.getElementById('sc1-type').style.color=d.color;
+  document.getElementById('sc1-title').textContent=d.sc1title;document.getElementById('sc1-desc').textContent=d.sc1desc;
+  document.getElementById('sc-name').placeholder=d.ph;
+  document.getElementById('sc-role-lbl').textContent=d.roleL;const rs=document.getElementById('sc-role-sel');rs.innerHTML=`<option>Select ${d.roleL.toLowerCase()}...</option>`+d.roleO.map(o=>`<option>${o}</option>`).join('');
+  document.getElementById('sc-spec-lbl').textContent=d.specL;const ss=document.getElementById('sc-spec-sel');ss.innerHTML=`<option>Select ${d.specL.toLowerCase()}...</option>`+d.specO.map(o=>`<option>${o}</option>`).join('');
+  document.getElementById('sc1-btn').style.background=d.color;
+  document.getElementById('sc-dark').style.background=d.color;document.getElementById('sc2-btn').style.color=d.color;
 }
 
-switchProf('doctor', document.querySelector('.prof-tab[data-prof="doctor"]'));
+function toggleMenu(){document.getElementById('mobile-menu').classList.toggle('open');}
+function closeMenu(){document.getElementById('mobile-menu').classList.remove('open');}
+
+switchProf('doctor',document.querySelector('.prof-tab[data-prof="doctor"]'));
 </script>
+</body>
+</html>
